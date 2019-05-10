@@ -1,7 +1,6 @@
 
 
-# ignore all png files (users can locally save output files, \
-but should not upload them to the shared repository)
+# ignore all png files (users can save plots and other output locally, but output files should not be uploaded to shared repository)
 *.png
 
 
