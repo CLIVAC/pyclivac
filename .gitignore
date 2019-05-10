@@ -1,0 +1,9 @@
+
+
+# ignore all png files (users can locally save output files, \
+but should not upload them to the shared repository)
+*.png
+
+
+# ignore juypter checkpoint files
+.ipynb_checkpoints
