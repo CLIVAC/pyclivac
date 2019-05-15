@@ -28,10 +28,48 @@ import os  # standard library imports first
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 # These abbreviated names are not to be used in docstrings; users must
 # be able to paste and execute docstrings after importing only the
 # numpy module itself, unabbreviated.
+
+
+def date_range(start_date, end_date, dateformat, increment, period):
+    """A function that creates an array of times.
+    
+    `var`
+    
+    Parameters
+    ----------
+    start_date : string
+        Input start date in string format. Must match dateformat based on datetime module.
+    end_date : string
+        Input end date in string format. Date you want your range of dates to go to.
+    dateformat : string
+        Input dateformat. Needs to match both start and end date based on datetime module.
+    increment : int
+        Input integer indicating the increment you want your dates to increase by.
+    period : string
+        Input indicating the periodicity of your range of dates. Examples include 'years', months', 'days', 'hours'. 
+        
+    Returns
+    -------
+    times
+        Array of times in between your start date and end date advancing with increment of the period. 
+    """
+    start_date = datetime.strptime(str(start_date), dateformat)
+    end_date = datetime.strptime(str(end_date), dateformat)
+    result = []
+    nxt = start_date
+    delta = relativedelta(**{period:increment})
+    while nxt <= end_date:
+        result.append(nxt)
+        nxt += delta
+    times = np.array(result)
+    
+    return times
 
 
 def foo(var1, var2, long_var_name='hi'):
