@@ -1,5 +1,74 @@
 ## used for plotting functions
 
+def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, color='b'):
+
+    '''A plug and chug quick line plot with one dependent variable, using matplotlib.
+    
+        Parameters
+        ----------
+        df_name: string
+            What data frame name taking data from, name potentially defined in resample (ex: df_daily).  
+        
+        df_loc: int
+            What array index of a data frame to graph.
+        
+        title: string, optional
+        
+        x_label: string, optional
+        
+        y_label: string, optional
+        
+        color: string, optional
+            Change line color, can also add line styles.
+            Quick reminder of color options: b,g,r,c,m,y,k,w
+        
+        Returns
+        -------
+        Line plot of df_name and df_loc entered.
+        
+        '''
+    x=df_name.index
+    y=df_name.iloc[:,df_loc]
+    c=color
+    
+    plt.plot(x, y, c)
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+    plt.xticks(rotation=90)
+    plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def draw_contour_map(dataset, lats, lons, fname, fmt='png', gridshape=(1, 1),
                      clabel='', ptitle='', subtitles=None, cmap=None,
                      clevs=None, nlevs=10, parallels=None, meridians=None,
