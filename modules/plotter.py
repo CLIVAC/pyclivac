@@ -1,5 +1,10 @@
 ## used for plotting functions
 
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
 def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, color='b'):
 
     '''A plug and chug quick line plot with one dependent variable, using matplotlib.
