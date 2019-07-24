@@ -52,7 +52,7 @@ def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, c
 
     
 
-def simple_contour_plot (data, lons, lats, proj= ccrs.PlateCarree(), title = '', colormap='YlOrRd', cbar_orientation = 'horizontal', 
+def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= ccrs.PlateCarree(), title = '', colormap='YlOrRd', cbar_orientation = 'horizontal', 
 #                          cbar_spacing='uniform', data units
                         ):
 
@@ -66,7 +66,10 @@ def simple_contour_plot (data, lons, lats, proj= ccrs.PlateCarree(), title = '',
         
         lats: float
         
+        trans:
+        
         proj: string, optional
+            (crs)
             Projection of what data displayed on.
             
         title: string, optional
@@ -83,9 +86,9 @@ def simple_contour_plot (data, lons, lats, proj= ccrs.PlateCarree(), title = '',
     
         '''
     fig = plt.figure(figsize=(7, 5))
-    ax = fig.add_subplot(1, 1, 1, projection=proj)
+    ax = fig.add_subplot(1, 1, 1, projection=mapcrs)
 
-    p = ax.contourf(lons, lats, data, transform=proj,
+    p = ax.contourf(lons, lats, data, transform=datacrs,
                 cmap = colormap, extend='both')
     
     ax.coastlines()
