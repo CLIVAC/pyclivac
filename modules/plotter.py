@@ -1,8 +1,15 @@
-## used for plotting functions
-
+# core scientific libraries
+import os
+import numpy as np
 import pandas as pd
-import seaborn as sns
+import xarray as xr
+# plotting
 import matplotlib.pyplot as plt
+import seaborn as sns
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+# secondary libraries
+import netCDF4 as nc
 
 
 def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, color='b'):
@@ -13,7 +20,6 @@ def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, c
         ----------
         df_name: string
             What data frame name taking data from, name potentially defined in resample (ex: df_daily).  
-        
         df_loc: int
             What array index of a data frame to graph.
         
@@ -44,8 +50,54 @@ def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, c
     plt.xticks(rotation=90)
     plt.show()
 
+    
 
+def simple_contour_plot (data, lons, lats, proj= ccrs.PlateCarree(), title = '', colormap='YlOrRd', cbar_orientation = 'horizontal', 
+#                          cbar_spacing='uniform', data units
+                        ):
 
+    '''A plug and chug quick contour plot for spatial data.
+    
+        Parameters
+        ----------
+        data: string
+        
+        lons: float
+        
+        lats: float
+        
+        proj: string, optional
+            Projection of what data displayed on.
+            
+        title: string, optional
+        
+        colormap: string, optional
+            https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
+            
+        cbar_orientation: string, optional
+            Color bar orientation, either horizonatal or vertical.
+            
+        Returns
+        -------
+        Contour plot of data within specified lat and lon.
+    
+        '''
+    fig = plt.figure(figsize=(7, 5))
+    ax = fig.add_subplot(1, 1, 1, projection=proj)
+
+    p = ax.contourf(lons, lats, data, transform=proj,
+                cmap = colormap, extend='both')
+    
+    ax.coastlines()
+    ax.gridlines()
+    plt.title(title)
+    
+    cbar = plt.colorbar(p, orientation=cbar_orientation,
+                    shrink=0.85, pad=0.05, 
+#                         spacing= cbar_spacing, label=data_units
+                       )
+    
+    plt.show()
 
 
 
