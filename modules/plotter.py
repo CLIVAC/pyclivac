@@ -85,11 +85,12 @@ def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= 
         Contour plot of data within specified lat and lon.
     
         '''
+    clevs = _nice_intervals(data, 10)
     fig = plt.figure(figsize=(7, 5))
     ax = fig.add_subplot(1, 1, 1, projection=mapcrs)
 
     p = ax.contourf(lons, lats, data, transform=datacrs,
-                cmap = colormap, extend='both')
+                cmap = colormap, extend='both', levels=clevs)
     
     ax.coastlines()
     ax.gridlines()
@@ -104,7 +105,43 @@ def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= 
 
 
 
+def _nice_intervals(data, nlevs):
+    '''
+    Purpose::
+        Calculates nice intervals between each color level for colorbars
+        and contour plots. The target minimum and maximum color levels are
+        calculated by taking the minimum and maximum of the distribution
+        after cutting off the tails to remove outliers.
+    Input::
+        data - an array of data to be plotted
+        nlevs - an int giving the target number of intervals
+    Output::
+        clevs - A list of floats for the resultant colorbar levels
+    '''
+    # Find the min and max levels by cutting off the tails of the distribution
+    # This mitigates the influence of outliers
+    data = data.ravel()
+    mn = mstats.scoreatpercentile(data, 5)
+    mx = mstats.scoreatpercentile(data, 95)
+    #if there min less than 0 and
+    # or max more than 0 
+    #put 0 in center of color bar
+    if mn < 0 and mx > 0:
+        level = max(abs(mn), abs(mx))
+        mnlvl = -1 * level
+        mxlvl = level
+    #if min is larger than 0 then
+    #have color bar between min and max
+    else:
+        mnlvl = mn
+        mxlvl = mx
+    locator = mpl.ticker.MaxNLocator(nlevs)
+    clevs = locator.tick_values(mnlvl, mxlvl)
 
+    # Make sure the bounds of clevs are reasonable since sometimes
+    # MaxNLocator gives values outside the domain of the input data
+    clevs = clevs[(clevs >= mnlvl) & (clevs <= mxlvl)]
+    return clevs
 
 
 
