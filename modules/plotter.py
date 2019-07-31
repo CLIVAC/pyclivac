@@ -52,9 +52,7 @@ def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, c
 
     
 
-def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= ccrs.PlateCarree(), title = '', colormap='YlOrRd', cbar_orientation = 'horizontal', 
-#                          cbar_spacing='uniform', data units
-                        ):
+def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= ccrs.PlateCarree(), title = None, data_units = '', sequential = False, diverging = False, colormap='', cbar_orientation = 'horizontal'):
 
     '''A plug and chug quick contour plot for spatial data.
     
@@ -66,13 +64,18 @@ def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= 
         
         lats: float
         
-        trans:
-        
-        proj: string, optional
-            (crs)
-            Projection of what data displayed on.
+        datacrs: string, optional
+            What projection data comes in.
+            Note: If data comes in lons & lats, means that it is PlateCarree().
+            https://scitools.org.uk/cartopy/docs/latest/crs/projections.html#cartopy-projections
+            
+        mapcrs: string, optional
+            What projection you want output to be in.
             
         title: string, optional
+        
+        data_units: string, optional
+            Used to label the colorbar values.
         
         colormap: string, optional
             https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
@@ -85,21 +88,30 @@ def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= 
         Contour plot of data within specified lat and lon.
     
         '''
-    clevs = _nice_intervals(data, 10)
+#     clevs = _nice_intervals(data, 10)
     fig = plt.figure(figsize=(7, 5))
     ax = fig.add_subplot(1, 1, 1, projection=mapcrs)
+    
+    if sequential == True:
+        colorbar = 'cool'
+    else: 
+        colobar = 'YlOrRd'
+    if diverging == True:
+        colorbar = 'RdBu'
+    else: 
+        colobar = 'YlOrRd'
 
     p = ax.contourf(lons, lats, data, transform=datacrs,
-                cmap = colormap, extend='both', levels=clevs)
+                cmap = colormap, extend='both'
+#                     , levels=clevs
+                   )
     
     ax.coastlines()
     ax.gridlines()
     plt.title(title)
     
     cbar = plt.colorbar(p, orientation=cbar_orientation,
-                    shrink=0.85, pad=0.05, 
-#                         spacing= cbar_spacing, label=data_units
-                       )
+                    shrink=0.85, pad=0.05, label=data_units)
     
     plt.show()
 
