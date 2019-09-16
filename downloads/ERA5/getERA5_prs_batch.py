@@ -1,29 +1,29 @@
 """
-Filename:    download_era5_prs_level.py
+Filename:    getERA5_prs_batch.py
 Author:      Tessa Montini, tmontini@ucsb.edu
-Description: Download ERA5 data on pressure levels
+Description: Download multi-year ERA5 data on pressure levels
 
 """
 import cdsapi
 
 # Data directory and file names
-datadir = "/home/sbarc/students/montini/data/downloads/"
-fprefix = "era5.q850.6hr"
+datadir = "/Users/tessamontini/Google_Drive/DATA/downloads/z500/"
+fprefix = "era5_z_500_6hr"
 
 # Input parameters
-var = 'specific_humidity'
-level = '850'
+var = 'geopotential'
+level = '500'
 start_yr = 1979
-end_yr   = 1980
+end_yr   = 2016
 
 # Optional parameters
-area = [15, -85, -50, -30]   # Default: global
-grid = [0.5, 0.5]            # Default: 0.25 x 0.25
+area = [20, -165, -60, -12]   # [N,W,S,E] Default: global
+grid = [0.5, 0.5]             # Default: 0.25 x 0.25
 
 
 # Loop for downloading annual data files
 for yr in range(start_yr,end_yr+1):
-    outfile = datadir + "{0}.{1}.nc".format(fprefix, yr)
+    outfile = datadir + "{0}_{1}.nc".format(fprefix, yr)
     c = cdsapi.Client()
     c.retrieve('reanalysis-era5-pressure-levels', 
                {'product_type'  : 'reanalysis',

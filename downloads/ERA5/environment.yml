@@ -1,0 +1,9 @@
+name: cds
+channels:
+  - conda-forge
+  - defaults  
+dependencies:
+  - python=3.7
+  - pip
+  - pip:
+    - cdsapi
