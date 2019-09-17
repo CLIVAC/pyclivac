@@ -1,0 +1,7 @@
+name: nco-env
+channels:
+  - conda-forge
+  - defaults  
+dependencies:
+  - pip
+  - nco
