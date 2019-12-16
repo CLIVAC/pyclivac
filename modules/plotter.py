@@ -56,7 +56,68 @@ def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, c
     plt.show()
 
     
+def simple_xarray_contour_map(data, cmap):
+    data = data
+    # Set map projection
+    mapcrs = ccrs.PlateCarree()  # what we want data to plot as
+    datacrs = ccrs.PlateCarree() # what projection data comes in
 
+    # Set up figure and axes
+    fig = plt.figure(figsize=(7, 5))
+    ax = fig.add_subplot(1, 1, 1, projection=mapcrs)
+
+    # Add data
+    p = ax.contourf(data.longitude, data.latitude, data[0].values, transform=datacrs,
+                cmap=cmap, extend='both')
+
+    # Add plot elements
+    ax.coastlines()
+    ax.gridlines()
+    t0 = pd.to_datetime(str(data.time.values[0])).strftime("%Y-%m-%d %H:%M")
+    plt.title(data.attrs['long_name'] + ' (' + data.attrs['units'] + ') at ' + t0)
+
+    # Add colorbar
+    cbar = plt.colorbar(p, orientation='horizontal',
+                        shrink=0.85, pad=0.05, 
+                        label=data.attrs['units'])
+
+    # Save to file
+    plt.savefig('plotfile.png')
+
+    # Show plot
+    plt.show()
+    
+def simple_xarray_pcolormesh_map(data, cmap, vmin, vmax):
+    data = data
+    # Set map projection
+    mapcrs = ccrs.PlateCarree()  # what we want data to plot as
+    datacrs = ccrs.PlateCarree() # what projection data comes in
+
+    # Set up figure and axes
+    fig = plt.figure(figsize=(7, 5))
+    ax = fig.add_subplot(1, 1, 1, projection=mapcrs)
+
+    # Add data
+    p = ax.pcolormesh(data.longitude, data.latitude, data[0].values, transform=datacrs,
+                cmap=cmap, vmin=vmin, vmax=vmax)
+
+    # Add plot elements
+    ax.coastlines()
+    ax.gridlines()
+    t0 = pd.to_datetime(str(data.time.values[0])).strftime("%Y-%m-%d %H:%M")
+    plt.title(data.attrs['long_name'] + ' (' + data.attrs['units'] + ') at ' + t0)
+
+    # Add colorbar
+    cbar = plt.colorbar(p, orientation='horizontal',
+                        shrink=0.85, pad=0.05, 
+                        label=data.attrs['units'])
+
+    # Save to file
+    plt.savefig('plotfile.png')
+
+    # Show plot
+    plt.show()
+    
 def simple_contour_plot (data, lons, lats, datacrs= ccrs.PlateCarree(), mapcrs= ccrs.PlateCarree(), title = None, data_units = '', sequential = False, diverging = False, colormap='', cbar_orientation = 'horizontal'):
 
     '''A plug and chug quick contour plot for spatial data.
@@ -277,5 +338,5 @@ def make_cmap(colors, position=None, bit=False):
         cdict['green'].append((pos, color[1], color[1]))
         cdict['blue'].append((pos, color[2], color[2]))
 
-    cmap = mpl.colors.LinearSegmentedColormap('my_colormap',cdict,256)
+    cmap = LinearSegmentedColormap('my_colormap',cdict,256)
     return cmap
