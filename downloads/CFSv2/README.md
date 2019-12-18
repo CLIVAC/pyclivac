@@ -5,7 +5,8 @@
     * CFSv2 is an operational analysis model representing the global interaction between Earth's oceans, land, and atmosphere.
     * Horizontal resolution: 0.5&deg;x0.5&deg;
     * Temporal resolution: 6-hourly
-* Three options for downloading CFS data: **1) [FTP](ftp://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh/)** **2) [THREDDs](https://www.ncei.noaa.gov/thredds/catalog/cfs_v2_for_ts/catalog.html) **3) [HTTP](https://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh/)
+* Three options for downloading CFS data: **1) [FTP](ftp://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh/)** or **2) [THREDDs](https://www.ncei.noaa.gov/thredds/catalog/cfs_v2_for_ts/catalog.html) ** or **3) [HTTP](https://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh/) **
+
 
 ### Scripts
 | Name | Description |
@@ -43,4 +44,5 @@ The following information was derived using [this website](https://www.cpc.ncep.
 * Download CFSv2 data (see above)
 * Install wgrib2 using instructions found [here](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/compile_questions.html)
 * Run wgrib code with .table file to convert grib files to netCDF. 
-`wgrib2 ../path/to/grib/file/20190304cdas1.t00z.pgrbh00.grib2 -nc_table ../path/to/table/cfsv2_g2nc_pressure.table -netcdf new_file.nc`
+
+```wgrib2 ../path/to/grib/file/20190304cdas1.t00z.pgrbh00.grib2 -nc_table ../path/to/table/cfsv2_g2nc_pressure.table -netcdf new_file.nc```
