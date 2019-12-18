@@ -1,0 +1,325 @@
+######################################################################
+# Filename:    cfsv2_g2nc.table
+# Author:      Deanna Nash, dlnash@ucsb.edu
+# Date:        28 August 2019
+# Description: Script to specify parameters for conversion from grib2 format to netCDF format
+# Initial Source: https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/netcdf.html
+#
+# - Input:Daily 6-hourly CFSv2 operational analysis grib2 files
+# - Explicitly defines the type of vertical level in the grib2 file to treat levels as 4D data
+# - e.g. {TIME, LEV, LAT, LON}
+#
+######################################################################
+
+
+$lev_type  100:p:pressure level:mb:0.01
+
+# 100                - the grib2 level type code number for treating data as 4D
+# p                  - short_name for the vertical axis in the netCDF file, string
+# pressure level     - long_name for the vertical axis in netCDF file, can include spaces
+# mb                 - vertical axis units as written in the netCDF file, string
+# 0.01               - decimal scale to convert grib2 level values to the netcdf values, float
+
+## Note: In this example, we are converting Pa to hPa (thus the decimal conversion scale of 0.01
+
+#
+# Vertical data on isobaric1 levels, 1000 hPa to 1 hPa - 37 pressure levels
+
+$nlev      37
+$levs  1000, 975, 950, 925, 900, 875, 850, 825, 800, 775, 
+       750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 
+       250, 225, 200, 175, 150, 125, 100, 70, 50, 30, 
+       20, 10, 7, 5, 3, 2, 1
+
+# Make the netCDF file GrADS compatible
+$grads 1
+
+UGRD:*:u
+VGRD:*:v
+TMP:*:temp
+VVEL:*:omega
+HGT:*:hgtprs
+RH:*:rh
+SPFH:*:spfh
+ABSV:*:absv
+STRM:*:strm
+VPOT:*:vpot
+O3MR:*:ozonemixing
+
+CLWMR:*:cloudmixing
+
+## Isobaric Variables to ignore
+VPOT:*:ignore
+STRM:*:ignore
+
+#
+# CFSv2 surface data conversion rules
+#
+
+PRES:mean sea level:prmsl
+CAPE:surface:capesfc
+CIN:surface:cinsfc
+PRATE:surface:prate
+PRES:surface:prsfc
+
+TMP:surface:tmpsfc
+PEVPR:surface:evapsfc
+LHTFL:surface:lhtfl
+LAND:surface:landmask
+HGT:surface:hgtsfc
+
+
+## 2D variables to keep
+PRES:tropopause:prestrop
+RH:0C isotherm:rh_0Cisotherm
+HGT:0C isotherm:hgt_0Cisotherm
+CWAT:entire atmosphere (considered as a single layer):cwat
+
+## Surface variables to ignore
+
+ACOND:surface:ignore
+4LFTX:surface:ignore
+CRAIN:surface:ignore
+WEASD:surface:ignore
+VGTYP:surface:ignore
+VEG:surface:ignore
+USWRF:surface:ignore
+ULWRF:surface:ignore
+SLTYP:surface:ignore
+SFCR:surface:ignore
+LFT X:surface:ignore
+SOTYP:surface:ignore
+SNOD:surface:ignore
+SHTFL:surface:ignore
+CNWAT:surface:ignore
+HPBL:surface:ignore
+ICETK:surface:ignore
+ICEC:surface:ignore
+GFLUX:surface:ignore
+FRICV:surface:ignore
+SFEXC:surface:ignore
+DSWRF:surface:ignore
+DSWRF:top of atmosphere:ignore
+DLWRF:surface:ignore
+CSDLF:surface:ignore
+CSDSF:surface:ignore
+DUVB:surface:ignore
+
+
+## Variables on isobaric Level (n=1) to ignore
+5WAVA:500 mb:ignore
+5WAVH:500 mb:ignore
+
+## Variables on isobaric3 (n=2) to ignore
+GPA:isobaric3:ignore
+
+
+## Tropopause variables to ignore
+VWSH:tropopause:ignore
+VGRD:tropopause:ignore
+UGRD:tropopause:ignore
+TMP:tropopause:ignore
+PRES:tropopause:ignore
+HGT:tropopause:ignore
+
+
+## Potential Vorticity Surface (n=8) **
+#PV=2e-06 (Km^2/kg/s) surface
+#PV=1.5e-06 (Km^2/kg/s) surface
+#PV=1e-06 (Km^2/kg/s) surface
+#PV=5e-07 (Km^2/kg/s) surface
+#PV=-5e-07 (Km^2/kg/s) surface
+#PV=-1e-06 (Km^2/kg/s) surface
+#PV=-1.5e-06 (Km^2/kg/s) surface
+#PV=-2e-06 (Km^2/kg/s) surface
+
+VWSH:PV=2e-06 (Km^2/kg/s) surface:ignore
+VGRD:PV=2e-06 (Km^2/kg/s) surface:ignore
+UGRD:PV=2e-06 (Km^2/kg/s) surface:ignore
+TMP:PV=2e-06 (Km^2/kg/s) surface:ignore
+PRES:PV=2e-06 (Km^2/kg/s) surface:ignore
+HGT:PV=2e-06 (Km^2/kg/s) surface:ignore
+
+VWSH:PV=1.5e-06 (Km^2/kg/s) surface:ignore
+VGRD:PV=1.5e-06 (Km^2/kg/s) surface:ignore
+UGRD:PV=1.5e-06 (Km^2/kg/s) surface:ignore
+TMP:PV=1.5e-06 (Km^2/kg/s) surface:ignore
+PRES:PV=1.5e-06 (Km^2/kg/s) surface:ignore
+HGT:PV=1.5e-06 (Km^2/kg/s) surface:ignore
+
+VWSH:PV=1e-06 (Km^2/kg/s) surface:ignore
+VGRD:PV=1e-06 (Km^2/kg/s) surface:ignore
+UGRD:PV=1e-06 (Km^2/kg/s) surface:ignore
+TMP:PV=1e-06 (Km^2/kg/s) surface:ignore
+PRES:PV=1e-06 (Km^2/kg/s) surface:ignore
+HGT:PV=1e-06 (Km^2/kg/s) surface:ignore
+
+VWSH:PV=5e-07 (Km^2/kg/s) surface:ignore
+VGRD:PV=5e-07 (Km^2/kg/s) surface:ignore
+UGRD:PV=5e-07 (Km^2/kg/s) surface:ignore
+TMP:PV=5e-07 (Km^2/kg/s) surface:ignore
+PRES:PV=5e-07 (Km^2/kg/s) surface:ignore
+HGT:PV=5e-07 (Km^2/kg/s) surface:ignore
+
+VWSH:PV=-5e-07 (Km^2/kg/s) surface:ignore
+VGRD:PV=-5e-07 (Km^2/kg/s) surface:ignore
+UGRD:PV=-5e-07 (Km^2/kg/s) surface:ignore
+TMP:PV=-5e-07 (Km^2/kg/s) surface:ignore
+PRES:PV=-5e-07 (Km^2/kg/s) surface:ignore
+HGT:PV=-5e-07 (Km^2/kg/s) surface:ignore
+
+VWSH:PV=-1e-06 (Km^2/kg/s) surface:ignore
+VGRD:PV=-1e-06 (Km^2/kg/s) surface:ignore
+UGRD:PV=-1e-06 (Km^2/kg/s) surface:ignore
+TMP:PV=-1e-06 (Km^2/kg/s) surface:ignore
+PRES:PV=-1e-06 (Km^2/kg/s) surface:ignore
+HGT:PV=-1e-06 (Km^2/kg/s) surface:ignore
+
+VWSH:PV=-1.5e-06 (Km^2/kg/s) surface:ignore
+VGRD:PV=-1.5e-06 (Km^2/kg/s) surface:ignore
+UGRD:PV=-1.5e-06 (Km^2/kg/s) surface:ignore
+TMP:PV=-1.5e-06 (Km^2/kg/s) surface:ignore
+PRES:PV=-1.5e-06 (Km^2/kg/s) surface:ignore
+HGT:PV=-1.5e-06 (Km^2/kg/s) surface:ignore
+
+VWSH:PV=-2e-06 (Km^2/kg/s) surface:ignore
+VGRD:PV=-2e-06 (Km^2/kg/s) surface:ignore
+UGRD:PV=-2e-06 (Km^2/kg/s) surface:ignore
+TMP:PV=-2e-06 (Km^2/kg/s) surface:ignore
+PRES:PV=-2e-06 (Km^2/kg/s) surface:ignore
+HGT:PV=-2e-06 (Km^2/kg/s) surface:ignore
+
+
+## height_above_ground
+
+VSTM:6000-0 m above ground:ignore
+USTM:6000-0 m above ground:ignore
+
+TMP:2 m above ground:ignore
+SPFH:2 m above ground:ignore
+
+HLCY:3000-0 m above ground:ignore
+HLCY:1000-0 m above ground:ignore
+
+USTM:6000-0 m above ground:ignore
+VSTM:6000-0 m above ground:ignore
+
+UGRD:10 m above ground:ignore
+VGRD:10 m above ground:ignore
+
+## pressure difference layer/pressure above ground
+# 30-0 mb above ground
+
+VGRD:30-0 mb above ground:ignore
+UGRD:30-0 mb above ground:ignore
+TMP:30-0 mb above ground:ignore
+SPFH:30-0 mb above ground:ignore
+RH:30-0 mb above ground:ignore
+PWAT:30-0 mb above ground:ignore
+PLI:30-0 mb above ground:ignore
+DPT:30-0 mb above ground:ignore
+
+CIN:180-0 mb above ground:ignore
+CAPE:180-0 mb above ground:ignore
+
+
+## sigma_layer (n=4)
+# 0.33-1 sigma layer
+# 0.44-1 sigma layer
+# 0.44-0.72 sigma layer
+RH:0.33-1 sigma layer:ignore
+RH:0.44-1 sigma layer:ignore
+RH:0.44-0.72 sigma layer:ignore
+
+## sigma (n=1) 0.995 sigma level
+VVEL:0.995 sigma level:ignore
+VGRD:0.995 sigma level:ignore
+UGRD:0.995 sigma level:ignore
+TMP:0.995 sigma level:ignore
+RH:0.995 sigma level:ignore
+POT:0.995 sigma level:ignore
+
+
+## Maximum wind level
+VGRD:max wind:ignore
+UGRD:max wind:ignore
+TMP:max wind:ignore
+PRES:max wind:ignore
+HGT:max wind:ignore
+
+## Hybrid Level - 1 hybrid level
+VGRD:1 hybrid level:ignore
+UGRD:1 hybrid level:ignore
+TMP:1 hybrid level:ignore
+SPFH:1 hybrid level:ignore
+HGT:1 hybrid level:ignore
+
+## Altitude above MSL (n=4)
+# 1829 m above mean sea level
+# 2743 m above mean sea level
+# 3658 m above mean sea level
+# 4572 m above mean sea level
+
+VGRD:1829 m above mean sea level:ignore
+VGRD:2743 m above mean sea level:ignore
+VGRD:3658 m above mean sea level:ignore
+VGRD:4572 m above mean sea level:ignore
+
+UGRD:1829 m above mean sea level:ignore
+UGRD:2743 m above mean sea level:ignore
+UGRD:3658 m above mean sea level:ignore
+UGRD:4572 m above mean sea level:ignore
+
+TMP:1829 m above mean sea level:ignore
+TMP:2743 m above mean sea level:ignore
+TMP:3658 m above mean sea level:ignore
+TMP:4572 m above mean sea level:ignore
+
+## entire atmosphere (considered as a single layer)
+TOZNE:entire atmosphere (considered as a single layer):ignore
+RH:entire atmosphere (considered as a single layer):ignore
+PWAT:entire atmosphere (considered as a single layer):ignore
+CWORK:entire atmosphere (considered as a single layer):ignore
+TCDC:entire atmosphere (considered as a single layer):ignore
+
+## Convective Cloud Layer
+TCDC:high cloud layer:ignore
+TCDC:middle cloud layer:ignore
+TCDC:low cloud layer:ignore
+TCDC:convective cloud layer:ignore
+TCDC:boundary layer cloud layer:ignore
+
+## depth_below_surface_layer1 (n=4)
+# 0-0.1 m below ground
+# 0.1-0.4 m below ground
+# 0.4-1 m below ground
+# 1-2 m below ground
+
+TMP:0-0.1 m below ground:ignore
+SOILM:0-0.1 m below ground:ignore
+SOILL:0-0.1 m below ground:ignore
+SOILW:0-0.1 m below ground:ignore
+
+TMP:0.1-0.4 m below ground:ignore
+SOILM:0.1-0.4 m below ground:ignore
+SOILL:0.1-0.4 m below ground:ignore
+SOILW:0.1-0.4 m below ground:ignore
+
+TMP:0.4-1 m below ground:ignore
+SOILM:0.4-1 m below ground:ignore
+SOILL:0.4-1 m below ground:ignore
+SOILW:0.4-1 m below ground:ignore
+
+TMP:1-2 m below ground:ignore
+SOILM:1-2 m below ground:ignore
+SOILL:1-2 m below ground:ignore
+SOILW:1-2 m below ground:ignore
+
+## Highest Tropospheric Freezing Level
+RH:highest tropospheric freezing level:ignore
+HGT:highest tropospheric freezing level:ignore
+
+########################
+
+
+# End of file
