@@ -5,8 +5,11 @@
     * CFSv2 is an operational analysis model representing the global interaction between Earth's oceans, land, and atmosphere.
     * Horizontal resolution: 0.5&deg;x0.5&deg;
     * Temporal resolution: 6-hourly
-* Three options for downloading CFS data: **1) [FTP](ftp://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh/)** or **2) [THREDDs](https://www.ncei.noaa.gov/thredds/catalog/cfs_v2_for_ts/catalog.html) ** or **3) [HTTP](https://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh/) **
+* Three options for downloading CFS data:
 
+**1) [FTP](ftp://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh)**
+**2) [THREDDs](https://www.ncei.noaa.gov/thredds/catalog/cfs_v2_for_ts/catalog.html)**
+**3) [HTTP](https://nomads.ncdc.noaa.gov/modeldata/cfsv2_analysis_pgbh/)**
 
 ### Scripts
 | Name | Description |
