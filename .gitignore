@@ -1,8 +1,8 @@
 
 
-# ignore all png files (users can save plots and other output locally, but output files should not be uploaded to shared repository)
+# ignore all png and mp4 files (users can save plots and other output locally, but output files should not be uploaded to shared repository)
 *.png
-
+*.mp4
 
 # ignore juypter checkpoint files
 .ipynb_checkpoints

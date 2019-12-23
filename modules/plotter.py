@@ -12,10 +12,13 @@ import xarray as xr
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 import colorsys
-from matplotlib.colors import LinearSegmentedColormap # Linear interpolation for color maps
+from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
+import matplotlib.ticker as mticker
+import matplotlib.animation as animation
 
 def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, color='b'):
 
@@ -40,8 +43,7 @@ def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, c
         
         Returns
         -------
-        Line plot of df_name and df_loc entered.
-        
+        Line plot of df_name and df_loc entered.        
         '''
     x=df_name.index
     y=df_name.iloc[:,df_loc]
@@ -340,3 +342,102 @@ def make_cmap(colors, position=None, bit=False):
 
     cmap = LinearSegmentedColormap('my_colormap',cdict,256)
     return cmap
+
+def _drawmap(fig, lons, lats, VO, cmap, clevs, title):
+    '''Draw contour map for create_animation.'''
+    # Set global extent on map
+    ext = [-180.0, 180.0, -90., 90.]
+    
+    # Set map and data projections
+    datacrs = ccrs.PlateCarree()  ## the projection the data is in
+    mapcrs = ccrs.PlateCarree() ## the projection you want your map displayed in
+    
+    # Add subplot, title, and set extent
+    ax = fig.add_subplot(1,1,1, projection=mapcrs)
+    ax.set_title(title, fontsize=14)
+    ax.set_extent(ext, crs=mapcrs)
+    
+    # Add Border Features
+    coast = ax.coastlines(linewidths=1.0)
+    ax.add_feature(cfeature.BORDERS)
+    
+    # Add grid lines
+    ndeg=20.
+    gl = ax.gridlines(crs=datacrs, draw_labels=True,
+                      linewidth=.5, color='black', alpha=0.5, linestyle='--')
+    gl.xlocator = mticker.FixedLocator(np.arange(ext[0], ext[1]+ndeg, ndeg))
+    gl.ylocator = mticker.FixedLocator(np.arange(ext[2], ext[3]+ndeg, ndeg))
+    gl.xformatter = LONGITUDE_FORMATTER
+    gl.yformatter = LATITUDE_FORMATTER
+    gl.xlabels_top = False
+    gl.ylabels_right = False
+    
+    # Add contour plot
+    cs = ax.contourf(lons, lats, VO, transform=datacrs, cmap=cmap, levels=clevs, zorder=1)
+    return cs
+    
+def _myanimate(i, fig, DS, var, lats, lons, cmap, clevs):
+    '''Loop through time steps for create_animation.'''
+    # Clear current axis to overplot next time step
+    ax = fig.gca()
+    ax.clear()
+    # Loop through time steps in ds
+    VO = DS[var].values[i]
+    # Set title based on long name and current time step
+    ts = pd.to_datetime(str(DS.time.values[i])).strftime("%Y-%m-%d %H:%M")
+    long_name = DS[var].long_name
+    title = '{0} at {1}'.format(long_name, ts)
+    # Add next contour map
+    new_contour = _drawmap(fig, lons, lats, VO, cmap, clevs, title) 
+    return new_contour
+
+def create_animation(DS, lats, lons, var, clevs, cmap):
+    '''Create an mp4 animation using an xarray dataset with lat, lon, and time dimensions.
+    
+        Parameters
+        ----------
+        DS: xarray dataset object
+              
+        lats: int
+            Array of latitudes from xarray dataset object
+        lons: int
+            Array of longitudes from xarray dataset object
+        var: string
+            Variable name to plot
+        clevs: int
+            Contour levels to plot
+        cmap: string
+            Colormap for plotting
+            
+        Returns
+        -------
+        filename, mp4 file of animation
+        
+        '''
+    
+    # Get information from ds
+    long_name = DS[var].long_name
+    units = DS[var].units
+    t0 = pd.to_datetime(str(DS.time.values[0])).strftime("%Y-%m-%d %H:%M")
+    title = '{0} at {1}'.format(long_name, t0)
+    FFMpegWriter = animation.writers['ffmpeg']
+    metadata = dict(title=title,
+                    comment='')
+    writer = FFMpegWriter(fps=20, metadata=metadata)
+    
+    # Create a new figure window
+    fig = plt.figure(figsize=[12,4])
+    # Draw first timestep
+    first_contour = _drawmap(fig, lons, lats, DS[var].values[0], cmap, clevs, title)
+
+    # Add a color bar
+    cbar = fig.colorbar(first_contour, orientation='vertical', cmap=cmap, shrink=0.55)
+    cbar.set_label(units, fontsize=12)
+    
+    # Loop through animation
+    ani = animation.FuncAnimation(fig, _myanimate, frames=np.arange(len(DS[var])),
+                                  fargs=(fig, DS, var, lats, lons, cmap, clevs), interval=50)
+    filename = long_name + ".mp4"
+    ani.save(filename)
+    
+    return filename
