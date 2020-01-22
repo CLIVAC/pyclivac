@@ -343,6 +343,7 @@ def make_cmap(colors, position=None, bit=False):
     cmap = LinearSegmentedColormap('my_colormap',cdict,256)
     return cmap
 
+
 def _drawmap(fig, lons, lats, VO, cmap, clevs, title):
     '''Draw contour map for create_animation.'''
     # Set global extent on map
