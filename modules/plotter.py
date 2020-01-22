@@ -17,8 +17,10 @@ import seaborn as sns
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
+from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 import matplotlib.ticker as mticker
 import matplotlib.animation as animation
+
 
 def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, color='b'):
 
@@ -442,3 +444,86 @@ def create_animation(DS, lats, lons, var, clevs, cmap):
     ani.save(filename)
     
     return filename
+
+
+def draw_basemap(ax, extent=None, xticks=None, yticks=None, grid=False):
+    """
+    Draws a basemap on which to plot data. 
+    
+    Map features include continents and country borders.
+    Option to set lat/lon tickmarks and draw gridlines.
+    
+    Parameters
+    ----------
+    ax : 
+        plot Axes on which to draw the basemap
+    
+    extent : float
+        Set map extent to [lonmin, lonmax, latmin, latmax] 
+        Default: None (uses global extent)
+        
+    grid : bool
+        Whether to draw grid lines. Default: False
+        
+    xticks : float
+        array of xtick locations (longitude tick marks)
+    
+    yticks : float
+        array of ytick locations (latitude tick marks)
+        
+    Returns
+    -------
+    ax :
+        plot Axes with Basemap
+    
+    Notes
+    -----
+    - Grayscale colors can be set using 0 (black) to 1 (white)
+    - Alpha sets transparency (0 is transparent, 1 is solid)
+    
+    Author
+    ------
+    Tessa Montini, tmontini@ucsb.edu
+    
+    """
+
+    # Use map projection (CRS) of the given Axes
+    mapcrs = ax.projection    
+    
+    ## Map Extent
+    # If no extent is given, use global extent
+    if extent is None:        
+        ax.set_global()
+    # If extent is given, set map extent to lat/lon bounding box
+    else:
+        ax.set_extent(extent, crs=mapcrs)
+    
+    # Add map features (continents and country borders)
+    ax.add_feature(cfeature.LAND, facecolor='0.9')      
+    ax.add_feature(cfeature.BORDERS, edgecolor='0.4', linewidth=0.8)
+    ax.add_feature(cfeature.COASTLINE, edgecolor='0.4', linewidth=0.8)
+
+    ## Tickmarks/Labels
+    # Set xticks if requested
+    if xticks is not None:
+        ax.set_xticks(xticks, crs=mapcrs)      
+        lon_formatter = LongitudeFormatter()
+        ax.xaxis.set_major_formatter(lon_formatter)
+    # Set yticks if requested
+    if yticks is not None:
+        ax.set_yticks(yticks, crs=mapcrs)
+        lat_formatter = LatitudeFormatter()
+        ax.yaxis.set_major_formatter(lat_formatter)
+    # apply tick parameters    
+    ax.tick_params(direction='out', 
+                   labelsize=8.5, 
+                   length=4, 
+                   pad=2, 
+                   color='black')
+    
+    ## Gridlines
+    # Draw gridlines if requested
+    if (grid == True):
+        ax.grid(color='k', alpha=0.5, linewidth=0.5, linestyle='--')
+    
+    return ax
