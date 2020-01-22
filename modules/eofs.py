@@ -211,16 +211,3 @@ def north_test(evals, n):
     
     return error
 
-
-# def get_pcs_std(z, npcs, npts):
-#     """Calculate standardized PC scores using SVD
-    
-#     **** need to verify equations... 
-#     different from pc calculatin in calc_eofs_svd **** 
-    
-#     """
-#     U, S, Vt = np.linalg.svd(z)
-#     tmp = np.sqrt(npts-1) * U[:,0:npcs]
-#     pcs_std = tmp.T
-    
-#     return pcs_std
