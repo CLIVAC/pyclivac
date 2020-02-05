@@ -1,24 +1,26 @@
 # ERA5
 
 ### Overview
-* Dataset Description ([ERA5 documentation](https://confluence.ecmwf.int/display/CKB/ERA5+data+documentation))
+* Dataset Description ([ERA5 documentation](https://confluence.ecmwf.int/display/CKB/ERA5%3A+data+documentation))
     * ERA5 is the 5th generation ECMWF atmospheric reanalysis
     * Horizontal resolution: 0.25&deg;x0.25&deg;
     * Temporal resolution: hourly
-* Two options for downloading ERA5 data: **1) [CDS web interface](https://cds.climate.copernicus.eu/#!/search?text=ERA5&type=dataset)** or **2) CDS API client** (python package)
-    * [How to use the CDS API](https://cds.climate.copernicus.eu/api-how-to)
-    * [How to download ERA5](https://confluence.ecmwf.int/display/CKB/How+to+download+ERA5)
+* [How to download ERA5](https://confluence.ecmwf.int/display/CKB/How+to+download+ERA5) data via the Climate Data Store (CDS) 
+   * Downloading ERA5 through the [CDS web interface](https://cds.climate.copernicus.eu/#!/search?text=ERA5&type=dataset)
+   * Downloading ERA5 through the [CDS API](https://cds.climate.copernicus.eu/api-how-to) (python package)
 
 ### Scripts
 | Name | Description |
 |:---  |:---         |
-| `download_era5_prs_level.py` | script for downloading ERA5 data on pressure levels
-| `download_era5_single_level.py` | scring for downloading ERA5 data on single levels |
-| `preprocess_era5.py` | script for preprocessing and concatenating ERA5 data files (uses NCO and CDO command line tools) |
+| `getERA5_prs.py` | script for retrieving ERA5 data on pressure levels |
+| `getERA5_sfc.py` | script for retrieving ERA5 data on single levels |
+| `getERA5_prs_batch.py` | scripts for retrieving large data requests (breaks request into smaller increments and saves to multiple outfiles) |
+| `getERA5_sfc_batch.py` |   |
+| `preprocessERA5_concat.py` | script for preprocessing and concatenating ERA5 data files (uses NCO and CDO command line tools) |
 
 
 ### Variables
-Frequently used data variables are listed in the tables below. See [here](https://confluence.ecmwf.int/display/CKB/ERA5+data+documentation#ERA5datadocumentation-Parameterlistings) for the full list of ERA5 parameters.
+Frequently used data variables are listed in the tables below. See [here](https://confluence.ecmwf.int/display/CKB/ERA5%3A+data+documentation#ERA5:datadocumentation-Parameterlistings) for the full list of ERA5 parameters.
 
 #### Pressure level variables
 CDS request variable | Name in data file
