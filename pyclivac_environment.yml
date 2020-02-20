@@ -17,4 +17,5 @@ dependencies:
   - seaborn
   - cmocean
   - metpy
+  - ipykernel
   - jupyter
