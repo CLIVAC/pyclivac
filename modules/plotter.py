@@ -22,16 +22,16 @@ import matplotlib.ticker as mticker
 import matplotlib.animation as animation
 
 
-def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, color='b'):
+def simple_line_plot(df, varname, title=None, x_label=None,  y_label=None, color='b'):
 
     '''A plug and chug quick line plot with one dependent variable, using matplotlib.
     
         Parameters
         ----------
-        df_name: string
+        df: pandas dataframe
             What data frame name taking data from, name potentially defined in resample (ex: df_daily).  
-        df_loc: int
-            What array index of a data frame to graph.
+        varname: str
+            the variable you want to plot.
         
         title: string, optional
         
@@ -45,18 +45,18 @@ def simple_line_plot(df_name, df_loc, title=None, x_label=None,  y_label=None, c
         
         Returns
         -------
-        Line plot of df_name and df_loc entered.        
+        Line plot of df and variable entered.        
         '''
-    x=df_name.index
-    y=df_name.iloc[:,df_loc]
+    x=df.index
+    y=df[varname]
     c=color
     
-    plt.plot(x, y, c)
+    plt.plot_date(x, y, c)
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
-    plt.xticks(rotation=90)
+    plt.xticks(rotation=45)
     plt.show()
 
     

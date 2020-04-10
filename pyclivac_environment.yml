@@ -19,3 +19,6 @@ dependencies:
   - metpy
   - ipykernel
   - jupyter
+  - pip:
+    - descartes
+    - boto3
