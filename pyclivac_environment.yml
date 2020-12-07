@@ -19,6 +19,6 @@ dependencies:
   - metpy
   - ipykernel
   - jupyter
+  - ffmpeg
   - pip:
-    - descartes
     - boto3
