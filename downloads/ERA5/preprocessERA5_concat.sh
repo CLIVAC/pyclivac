@@ -31,9 +31,13 @@ for year in $(seq $start_yr $end_yr)
 do
     infile="era5_${invar}_${level}_${tstep}_${year}.nc"
     echo "Unpacking ${infile}..."
-    # unpack infile
+    # unpack infile 
+    # files are packed if var type is "short" instead of "float" when you use ncdump
+    # packed files are not stored as floats
+    # packed files can't be concatted
     ncpdq -O --unpack ${infile} tmp.nc
-    # make time the record dimension
+    # make time the record dimension - usually always make time record dimension
+    # needed to concatenate files together - probably got an error when initially concatenated
     ncks -O --mk_rec_dmn time tmp.nc upk.${year}.nc
 done
 

@@ -60,7 +60,7 @@ def simple_line_plot(df, varname, title=None, x_label=None,  y_label=None, color
     plt.show()
 
     
-def simple_xarray_contour_map(data, cmap):
+def simple_xarray_contour_map(data, cmap, cflevs=None):
     data = data
     # Set map projection
     mapcrs = ccrs.PlateCarree()  # what we want data to plot as
@@ -72,7 +72,7 @@ def simple_xarray_contour_map(data, cmap):
 
     # Add data
     p = ax.contourf(data.longitude, data.latitude, data[0].values, transform=datacrs,
-                cmap=cmap, extend='both')
+                cmap=cmap, levels=cflevs, extend='both')
 
     # Add plot elements
     ax.coastlines()
@@ -83,7 +83,7 @@ def simple_xarray_contour_map(data, cmap):
     # Add colorbar
     cbar = plt.colorbar(p, orientation='horizontal',
                         shrink=0.85, pad=0.05, 
-                        label=data.attrs['units'])
+                        label=data.attrs['units'], spacing='uniform')
 
     # Save to file
     plt.savefig('plotfile.png')
