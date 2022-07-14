@@ -394,7 +394,7 @@ def _myanimate(i, fig, DS, var, lats, lons, cmap, clevs):
     new_contour = _drawmap(fig, lons, lats, VO, cmap, clevs, title) 
     return new_contour
 
-def create_animation(DS, lats, lons, var, clevs, cmap):
+def create_animation(DS, lats, lons, var, clevs, cmap, filetype=".mp4"):
     '''Create an mp4 animation using an xarray dataset with lat, lon, and time dimensions.
     
         Parameters
@@ -440,7 +440,7 @@ def create_animation(DS, lats, lons, var, clevs, cmap):
     # Loop through animation
     ani = animation.FuncAnimation(fig, _myanimate, frames=np.arange(len(DS[var])),
                                   fargs=(fig, DS, var, lats, lons, cmap, clevs), interval=50)
-    filename = long_name + ".mp4"
+    filename = long_name + filetype
     ani.save(filename)
     
     return filename
